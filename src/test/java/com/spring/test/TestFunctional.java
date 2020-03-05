@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-
+import com.Stock.Services.LoginService;
 import com.spring.model.User;
 import com.spring.services.AdminService;
 import com.spring.services.UserService;
@@ -35,7 +35,7 @@ public class TestFunctional {
 	}
 	
 	public void testGetUser() {
-		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("Stock-application.xml");
+		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("spring-application.xml");
 		User user = new User();
 
 		user.setUserId(1);
@@ -50,9 +50,9 @@ public class TestFunctional {
 	}
 
 	@Test
-	public void testUpdateContent()
+	public void testUpdateUser()
 	{
-		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("pixogram-application.xml");
+		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("spring-application.xml");
 
 		User user = new User();
 
@@ -71,7 +71,7 @@ public class TestFunctional {
 	@Test
 	public void testRegister()
 	{
-		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("pixogram-application.xml");
+		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("spring-application.xml");
 
 		User user = new User();
 
@@ -91,7 +91,7 @@ public class TestFunctional {
 	@Test
 	public void testUserList()
 	{
-		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("pixogram-application.xml");
+		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("spring-application.xml");
 		
 		User user = new User();
 		user.setUserId(1);
@@ -109,5 +109,37 @@ public class TestFunctional {
 		assertSame(user,Userfromdb);
 
 	}
+	public void testGetUserdetails() {
+		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("spring-application.xml");
+		User user = new User();
 
+		user.setUserId(1);
+		user.setUsername("meghana");
+		user.setPassword("meghana1234");
+		user.setRepeatPassword("meghana1234");
+		user.setEmail("meghana6116@gmail.com");
+		user.setPhoto("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png");
+		UserService userservice=(UserService) context.getBean("userservice");
+		User userfromdb =userservice.getUser(user.getUserId());
+		assertEquals(user,userfromdb);
+	}
+	@Test
+	public void testSignIn()
+	{
+		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("Stock-application.xml");
+
+		User user = new User();
+		
+		user.setUserId(1);
+		user.setUsername("meghana");
+		user.setPassword("meghana1234");
+		user.setRepeatPassword("meghana1234");
+		user.setEmail("meghana6116@gmail.com");
+		user.setPhoto("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png");
+		
+		UserService userservice=(UserService) context.getBean("userservice");
+		userservice.signIn(user.getUsername(),user.getPassword());
+		boolean userfromdb =userservice.signIn(user.getUsername(),user.getPassword());
+		assertSame(true,userfromdb);
+	}
 }
